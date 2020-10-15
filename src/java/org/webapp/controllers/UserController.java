@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.webapp.models.User;
+import org.webapp.dao.UserDao;
 
 /**
  *
@@ -19,7 +21,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "UserController", urlPatterns = {"/UserController"})
 public class UserController extends HttpServlet {
-
+    User userModel = new User();
+    UserDao userDao = new UserDao();
+    boolean resultAuth;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,15 +39,14 @@ public class UserController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UserController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            this.userModel.setNickname(request.getParameter("userWP"));
+            this.userModel.setPassword(request.getParameter("passWP"));
+            this.resultAuth = this.userDao.authentication(this.userModel);
+            if( this.resultAuth ) {
+                response.sendRedirect("home.jsp");
+            } else {
+                System.out.println("error init session...");
+            }
         }
     }
 

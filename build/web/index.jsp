@@ -21,14 +21,14 @@
 
         <div class="card" id="max-space-card"  >
             <div class="card-body">
-                <form method="post" action="UsuarioController" >
+                <form method="post" action="UserController" >
                     <div class="form-group">
                         <label for="exampleInputEmail1">Usuario</label>
                         <input 
                             type="text" 
                             class="form-control" 
                             id="exampleInputEmail1"
-                            name="usuario"
+                            name="userWP"
                             aria-describedby="emailHelp">
                     </div>
                     <div class="form-group">
@@ -36,7 +36,7 @@
                         <input 
                             type="password" 
                             class="form-control" 
-                            name="clave"
+                            name="passWP"
                             id="exampleInputPassword1">
                     </div>
                     <input  name="accion" type="hidden" value="login">
