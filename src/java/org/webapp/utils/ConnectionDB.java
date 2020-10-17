@@ -7,36 +7,59 @@ package org.webapp.utils;
 
 import java.sql.Connection;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.webapp.models.User;
 
 /**
  *
  * @author Pablo Jacobo
  */
 public class ConnectionDB {
-   
-    public static void executeQuerySQL(){
-        System.out.println("holasss*****************");
-        String urlDB = "jdbc:oracle:thin:@localhost:1521:XE";
-        String user = "sys as sysdba";
-        String pass = "jsdeveloper";
+    private static ConnectionDB instance;
+    String jdbUrl = "jdbc:oracle:thin:@127.0.0.1:1521/XE";
+    String driver = "oracle.jdbc.driver.OracleDriver";
+    String user = "sys as sysdba";
+    String pass = "jsdeveloper";
+    static Connection cn;
+    static Statement s;
+    static ResultSet rs;
+    
+    public static ConnectionDB getInstance(){
+        if( instance == null ) {
+            instance = new ConnectionDB();
+        }
+        return instance;
+    }
+    
+    public void verifyUser(String cmd ) throws ClassNotFoundException{
+        List<User> userFind = new ArrayList();
+        User userLogged = null;
         
         try {
-            Connection cn = DriverManager.getConnection(urlDB, user, pass );
-            String sqlRead = "SELECT * FROM USER_PG";
+            Class.forName(driver);
+            cn = java.sql.DriverManager.getConnection(jdbUrl, user, pass);
+            s = cn.createStatement(); 
+            
+            String sqlRead = cmd;
             ResultSet rs = null;
             Statement stRead = cn.createStatement();
             rs = stRead.executeQuery(sqlRead);
-            while( rs.next() ) {
-                System.out.println(" nick : " + rs.getString("NICKNAME"));
-                System.out.println(" pass : " + rs.getString("PASSWORD"));
+            
+            if ( rs.next() == false) {
+                System.out.println(" user not exist in db ... ");
+                userLogged = null;
+            } else {
+                System.out.println(" user logged..");
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
+    
+    
     
     
 }

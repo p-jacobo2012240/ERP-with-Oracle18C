@@ -41,15 +41,10 @@ public class UserController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            try {
                 /* TODO output your page here. You may use following sample code. */
-                //this.userModel.setNickname(request.getParameter("userWP"));
-                //this.userModel.setPassword(request.getParameter("passWP"));
-                //this.userDao.auth(this.userModel);
-                ConnectionDBB.getInstance().cnDATA();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                this.userModel.setNickname(request.getParameter("userWP"));
+                this.userModel.setPassword(request.getParameter("passWP"));
+                this.userDao.auth(this.userModel);
         }
     }
 

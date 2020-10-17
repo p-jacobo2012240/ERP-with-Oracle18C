@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package org.webapp.dao;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,30 +17,16 @@ import org.webapp.models.User;
  */
 public class UserDao {
     private String query = "";
-    private ConnectionDB connection = new ConnectionDB();
-     private ResultSet resultSet;
     
-    public void auth(User user ) {
-        List<User> userMatches = new ArrayList();
-        this.query = "SELECT * FROM USER_PG";
-        
-        System.out.println(" el query es * " + this.query );
-        
+    public void auth(User user )  {
         try {
-            this.connection.executeQuerySQL();
-            //System.out.println(" el result set es **"+ this.resultSet );
-            while( this.resultSet.next() ) {
-                System.out.println("*********************");
-                /*User userFind = new User();
-                userFind.setNickname( this.resultSet.getString("NICKNAME"));
-                userFind.setPassword( this.resultSet.getString("PASSWORD"));
-                userMatches.add(user);*/
-            }
-        } catch (SQLException ex) {
+            this.query = "SELECT * FROM USER_PG "
+                + "WHERE  USER_PG.nickname = '"+ user.getNickname() +"' "
+                + "AND  USER_PG.password = '"+ user.getPassword() +"'";
+            ConnectionDB.getInstance().verifyUser(this.query);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //System.out.println(" el obj es" + userMatches.size() );
-        //return userMatches.iterator().next();
     }
     
 }
