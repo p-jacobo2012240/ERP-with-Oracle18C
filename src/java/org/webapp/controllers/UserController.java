@@ -7,6 +7,8 @@ package org.webapp.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.webapp.models.User;
 import org.webapp.dao.UserDao;
+import org.webapp.models.User;
+import org.webapp.utils.ConnectionDBB;
 
 /**
  *
@@ -23,7 +27,6 @@ import org.webapp.dao.UserDao;
 public class UserController extends HttpServlet {
     User userModel = new User();
     UserDao userDao = new UserDao();
-    boolean resultAuth;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,14 +41,14 @@ public class UserController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            this.userModel.setNickname(request.getParameter("userWP"));
-            this.userModel.setPassword(request.getParameter("passWP"));
-            this.resultAuth = this.userDao.authentication(this.userModel);
-            if( this.resultAuth ) {
-                response.sendRedirect("home.jsp");
-            } else {
-                System.out.println("error init session...");
+            try {
+                /* TODO output your page here. You may use following sample code. */
+                //this.userModel.setNickname(request.getParameter("userWP"));
+                //this.userModel.setPassword(request.getParameter("passWP"));
+                //this.userDao.auth(this.userModel);
+                ConnectionDBB.getInstance().cnDATA();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
