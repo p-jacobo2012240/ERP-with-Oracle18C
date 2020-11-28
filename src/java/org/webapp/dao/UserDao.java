@@ -18,15 +18,66 @@ import org.webapp.models.User;
 public class UserDao {
     private String query = "";
     
-    public void auth(User user )  {
+    public boolean auth(User user )  {
+        boolean statusLogin = false;
         try {
-            this.query = "SELECT * FROM USER_PG "
-                + "WHERE  USER_PG.nickname = '"+ user.getNickname() +"' "
-                + "AND  USER_PG.password = '"+ user.getPassword() +"'";
-            ConnectionDB.getInstance().verifyUser(this.query);
+            this.query = "SELECT * FROM  USUARIOS "
+                + "WHERE  USUARIOS.nickname = '"+ user.getNickname() +"' "
+                + "AND  USUARIOS.password = '"+ user.getPassword() +"'";
+            statusLogin = ConnectionDB.getInstance().verifyUser(this.query);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return statusLogin;
     }
+    
+    public boolean registerUser(User user ) {
+        boolean statusRegister = false;
+        try {
+            int value = this.getLastRegister();
+           
+            this.query = "INSERT INTO USUARIOS(ID_USUARIO,"
+                + " NICKNAME, PASSWORD) VALUES ("+ ( value + 1 ) +", "
+                 + "'"+ user.getNickname() +"', '" + user.getPassword() + "' )";
+            
+            statusRegister = ConnectionDB.getInstance().registerUser(this.query);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return statusRegister;
+    }
+    
+    public boolean deleteUser(int idUser ) {
+        boolean statusUser = false;
+        this.query = "DELETE FROM USUARIOS WHERE USUARIOS.ID_USUARIO = " + idUser;
+        try {
+            statusUser = ConnectionDB.getInstance().deleteUser(this.query);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return statusUser;
+    }
+    
+    public List<User> getRegisteredUsers() {
+        List<User> listUsers = new ArrayList();
+        this.query = "SELECT * FROM  USUARIOS";
+        try {
+            listUsers = ConnectionDB.getInstance().getUsers(this.query);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listUsers;
+    }
+    
+    
+    public int getLastRegister() {
+        int value = 0;
+        this.query = "SELECT MAX(ID_USUARIO) AS \"LAST_ID\" FROM USUARIOS";
+        List<User> usrs = ConnectionDB.getInstance().getLastUserRegister(this.query);
+        value = usrs.iterator().next().getIdUsuario();
+        return value;
+    }
+    
+    
     
 }

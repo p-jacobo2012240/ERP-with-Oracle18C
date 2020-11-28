@@ -10,6 +10,7 @@ package org.webapp.models;
  * @author Pablo Jacobo
  */
 public class User {
+    private int idUsuario;
     private String nickname;
     private String password;
 
@@ -19,6 +20,16 @@ public class User {
     }
     
     public User( ) {}
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
     
     public String getNickname() {
         return nickname;
